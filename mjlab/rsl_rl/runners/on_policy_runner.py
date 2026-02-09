@@ -324,6 +324,12 @@ class OnPolicyRunner:
             path=policy_path,
             filename="policy.onnx",
         )
+        export_policy_as_jit(
+            policy=self.alg.policy,
+            normalizer=self.alg.policy.actor_obs_normalizer,
+            path=policy_path,
+            filename="policy.pt",
+        )
 
     def load(self, path: str, load_optimizer: bool = True, map_location: str | None = None):
         loaded_dict = torch.load(path, weights_only=False, map_location=map_location)

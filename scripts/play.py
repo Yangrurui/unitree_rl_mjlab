@@ -9,6 +9,7 @@ import torch
 import tyro
 
 from mjlab.rsl_rl.runners import OnPolicyRunner
+from mjlab.rsl_rl.utils.exporter import export_policy_as_jit
 from mjlab.envs import ManagerBasedRlEnv
 from mjlab.rl import RslRlVecEnvWrapper
 from mjlab.tasks.registry import list_tasks, load_env_cfg, load_rl_cfg, load_runner_cls
@@ -33,6 +34,8 @@ class PlayConfig:
     video_width: int | None = None
     camera: int | str | None = None
     viewer: Literal["auto", "native", "viser"] = "auto"
+    # Export policy as TorchScript (.pt) to checkpoint dir before playing.
+    trace_pt: bool = True
 
     # Internal flag used by demo script.
     _demo_mode: tyro.conf.Suppress[bool] = False
@@ -153,6 +156,15 @@ def run_play(task_id: str, cfg: PlayConfig):
         runner_cls = load_runner_cls(task_id) or OnPolicyRunner
         runner = runner_cls(env, asdict(agent_cfg), device=device)
         runner.load(str(resume_path), map_location=device)
+        if cfg.trace_pt:
+            export_dir = str(log_dir)
+            export_policy_as_jit(
+                policy=runner.alg.policy,
+                normalizer=runner.alg.policy.actor_obs_normalizer,
+                path=export_dir,
+                filename="policy.pt",
+            )
+            print(f"[INFO] Traced PT saved to {log_dir / 'policy.pt'}")
         policy = runner.get_inference_policy(device=device)
 
     # Handle "auto" viewer selection.
@@ -164,7 +176,17 @@ def run_play(task_id: str, cfg: PlayConfig):
         resolved_viewer = cfg.viewer
 
     if resolved_viewer == "native":
-        NativeMujocoViewer(env, policy).run()
+        try:
+            NativeMujocoViewer(env, policy).run()
+        except RuntimeError as e:
+            if "viewer" in str(e).lower() or "window" in str(e).lower():
+                print(
+                    "[WARN] Native viewer failed (e.g. no display / GLX context). "
+                    "Falling back to Viser web viewer. Use --viewer viser to skip native."
+                )
+                ViserPlayViewer(env, policy).run()
+            else:
+                raise
     elif resolved_viewer == "viser":
         ViserPlayViewer(env, policy).run()
     else:

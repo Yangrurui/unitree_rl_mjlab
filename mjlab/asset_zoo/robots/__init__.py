@@ -22,3 +22,7 @@ from mjlab.asset_zoo.robots.unitree_h1_2.h1_2_constants import (
 from mjlab.asset_zoo.robots.unitree_go2.go2_constants import (
   get_go2_robot_cfg as get_go2_robot_cfg,
 )
+
+from mjlab.asset_zoo.robots.adam_sp.adam_sp_constants import (
+  get_adam_sp_robot_cfg as get_adam_sp_robot_cfg,
+)
