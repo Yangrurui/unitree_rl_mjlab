@@ -159,23 +159,7 @@ def adam_sp_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
 def adam_sp_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
   """Create Adam SP flat terrain velocity configuration."""
   cfg = adam_sp_rough_env_cfg(play=play)
-  cfg.commands = {
-    "twist": UniformVelocityCommandCfg(
-      entity_name="robot",
-      resampling_time_range=(3.0, 8.0),
-      rel_standing_envs=0.05,
-      rel_heading_envs=0.25,
-      heading_command=False,
-      heading_control_stiffness=0.5,
-      debug_vis=True,
-      ranges=UniformVelocityCommandCfg.Ranges(
-        lin_vel_x=(-0.0, 1.0),
-        lin_vel_y=(-0.0, 0.0),
-        ang_vel_z=(-0.0, 0.0),
-      ),
-    )
-  }
-
+  
   # Switch to flat terrain.
   assert cfg.scene.terrain is not None
   cfg.scene.terrain.terrain_type = "plane"
