@@ -275,7 +275,7 @@
                     <joint name="left_elbow_joint" class="elbow" />
                     
                     <geom class="visual" mesh="elbowLeft" />
-                    <geom name="left_elbow_yaw_collision" class="collision" type="capsule" size="0.045" fromto="-0.028 0.028 -0.25 -0.028 0.028 -0.03" />
+                    <geom name="left_elbow_yaw_collision" class="collision" type="capsule" size="0.045" fromto="-0.028 0.028 -0.2 -0.028 0.028 -0.05" />
                     <body name="left_wrist_yaw_link" pos="-0.025 0.0285 -0.0729">
                       <inertial pos="-0.00174399 0.0001059 -0.0921606" quat="0.999719 0.00455358 0.00795284 0.0218673" mass="0.955879" diaginertia="0.00254019 0.00248455 0.000526048" />
                       <joint name="left_wrist_yaw_joint" class="wrist_yaw" />
@@ -321,7 +321,7 @@
                     <joint name="right_elbow_joint" class="elbow" />
                     
                     <geom class="visual" mesh="elbowRight" />
-                    <geom name="right_elbow_yaw_collision" class="collision" type="capsule" size="0.045" fromto="-0.028 -0.028 -0.25 -0.028 -0.028 -0.03" />
+                    <geom name="right_elbow_yaw_collision" class="collision" type="capsule" size="0.045" fromto="-0.028 -0.028 -0.2 -0.028 -0.028 -0.05" />
                     <body name="right_wrist_yaw_link" pos="-0.025 -0.0285 -0.0729">
                       <inertial pos="-0.00173086 -0.00013146 -0.0921689" quat="0.999713 -0.00473049 0.00793689 -0.0221096" mass="0.955878" diaginertia="0.00254068 0.00248454 0.000525567" />
                       <joint name="right_wrist_yaw_joint" class="wrist_yaw" />
