@@ -191,6 +191,18 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
         "bias_range": (-0.01, 0.01),
       },
     ),
+    "pd_gains": EventTermCfg(
+      mode="startup",
+      func=mdp.randomize_pd_gains,
+      # domain_randomization=True,
+      params={
+        "asset_cfg": SceneEntityCfg("robot"),
+        "kp_range": (0.8, 1.2),
+        "kd_range": (0.8, 1.2),
+        "distribution": "uniform",
+        "operation": "scale",
+      },
+    ),
     "foot_friction": EventTermCfg(
       mode="startup",
       func=mdp.randomize_field,
@@ -274,7 +286,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
       func=mdp.bad_motion_body_pos_z_only,
       params={
         "command_name": "motion",
-        "threshold": 0.5,
+        "threshold": 1.0,
         "body_names": (),  # Set per-robot.
       },
     ),
