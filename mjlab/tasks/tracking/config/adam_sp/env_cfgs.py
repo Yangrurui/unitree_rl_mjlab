@@ -36,7 +36,7 @@ def adam_sp_flat_tracking_env_cfg(
 
   motion_cmd = cfg.commands["motion"]
   assert isinstance(motion_cmd, MotionCommandCfg)
-  motion_cmd.anchor_body_name = "torso_link"
+  motion_cmd.anchor_body_name = "pelvis"
   motion_cmd.body_names = (
     "pelvis",
     "left_hip_roll_link",
@@ -66,7 +66,7 @@ def adam_sp_flat_tracking_env_cfg(
     "right_wrist_roll_link",
   )
 
-  cfg.viewer.body_name = "torso_link"
+  cfg.viewer.body_name = "pelvis"
 
   # Modify observations if we don't have state estimation.
   if not has_state_estimation:
