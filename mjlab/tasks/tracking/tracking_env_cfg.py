@@ -241,6 +241,26 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
       weight=1.0,
       params={"command_name": "motion", "std": 0.4},
     ),
+    "upper_motion_body_pos": RewardTermCfg(
+      func=mdp.motion_relative_body_position_error_exp,
+      weight=1.0,
+      params={"command_name": "motion", "std": 0.2},
+    ),
+    "upper_motion_body_ori": RewardTermCfg(
+      func=mdp.motion_relative_body_orientation_error_exp,
+      weight=1.0,
+      params={"command_name": "motion", "std": 0.3},
+    ),
+    "lower_motion_body_pos": RewardTermCfg(
+      func=mdp.motion_relative_body_position_error_exp,
+      weight=1.0,
+      params={"command_name": "motion", "std": 0.4},
+    ),
+    "lower_motion_body_ori": RewardTermCfg(
+      func=mdp.motion_relative_body_orientation_error_exp,
+      weight=1.0,
+      params={"command_name": "motion", "std": 0.5},
+    ),
     "motion_body_lin_vel": RewardTermCfg(
       func=mdp.motion_global_body_linear_velocity_error_exp,
       weight=1.0,

@@ -88,7 +88,7 @@ python scripts/csv_to_npz.py \
 确保有可用的npz文件之后，执行以下指令进行训练：
 
 ```bash
-python scripts/train.py Mjlab-Tracking-Flat-Adam-SP --motion_file=mjlab/motions/adam_sp/dance1_subject2.npz --env.scene.num-envs=4096
+CUDA_VISIBLE_DEVICES=0 python scripts/train.py Mjlab-Tracking-Flat-Adam-SP --motion_file=mjlab/motions/adam_sp/dance1_subject2.npz --env.scene.num-envs=4096 --agent.logger=wandb
 ```
 
 </div>
