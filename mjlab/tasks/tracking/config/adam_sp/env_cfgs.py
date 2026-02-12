@@ -80,6 +80,7 @@ def adam_sp_flat_tracking_env_cfg(
       concatenate_terms=True,
       enable_corruption=True,
     )
+    cfg.rewards["motion_body_ori"].weight = 1.5
 
   # Apply play mode overrides.
   if play:
