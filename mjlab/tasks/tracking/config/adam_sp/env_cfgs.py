@@ -17,8 +17,11 @@ def adam_sp_flat_tracking_env_cfg(
 ) -> ManagerBasedRlEnvCfg:
   """Create Unitree G1 flat terrain tracking configuration."""
   cfg = make_tracking_env_cfg()
+  # cfg.sim.mujoco.timestep = 0.002
+  # cfg.decimation = 10
 
   cfg.scene.entities = {"robot": get_adam_sp_robot_cfg()}
+
 
   self_collision_cfg = ContactSensorCfg(
     name="self_collision",
@@ -81,6 +84,7 @@ def adam_sp_flat_tracking_env_cfg(
     "right_knee_link",
     "right_ankle_roll_link",
   )
+  cfg.rewards["lower_motion_body_pos"].weight = 0.5
   cfg.rewards["lower_motion_body_ori"].params["body_names"] = (
     "left_hip_roll_link",
     "left_knee_link",
@@ -89,8 +93,10 @@ def adam_sp_flat_tracking_env_cfg(
     "right_knee_link",
     "right_ankle_roll_link",
   )
+  cfg.rewards["lower_motion_body_ori"].weight = 0.5
   cfg.rewards["motion_body_pos"].weight = 0.0
   cfg.rewards["motion_body_ori"].weight = 0.0
+  cfg.rewards["action_rate_l2"].weight = -0.2
   cfg.events["foot_friction"].params[
     "asset_cfg"
   ].geom_names = r"^(left|right)_foot[1-9]_collision$"
@@ -117,7 +123,6 @@ def adam_sp_flat_tracking_env_cfg(
       concatenate_terms=True,
       enable_corruption=True,
     )
-    # cfg.rewards["motion_body_ori"].weight = 1.5
 
   # Apply play mode overrides.
   if play:
