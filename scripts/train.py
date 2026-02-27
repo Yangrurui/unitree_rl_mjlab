@@ -32,6 +32,8 @@ class TrainConfig:
     enable_nan_guard: bool = False
     torchrunx_log_dir: str | None = None
     wandb_run_path: str | None = None
+    log_dir_name: str | None = None
+    """Override run directory name (e.g. new_dof_pos). If None, use timestamp."""
     gpu_ids: list[int] | Literal["all"] | None = field(default_factory=lambda: [0])
 
     @staticmethod
@@ -155,9 +157,12 @@ def launch_training(task_id: str, args: TrainConfig | None = None):
 
     log_root_path = Path("logs") / "rsl_rl" / args.agent.experiment_name
     log_root_path.resolve()
-    log_dir_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    if args.agent.run_name:
-        log_dir_name += f"_{args.agent.run_name}"
+    if args.log_dir_name:
+        log_dir_name = args.log_dir_name
+    else:
+        log_dir_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        if args.agent.run_name:
+            log_dir_name += f"_{args.agent.run_name}"
     log_dir = log_root_path / log_dir_name
 
     selected_gpus, num_gpus = select_gpus(args.gpu_ids)

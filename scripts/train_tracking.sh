@@ -3,7 +3,7 @@
 # 用法示例:
 #   ./scripts/train_tracking.sh
 #   ./scripts/train_tracking.sh -b   # 后台运行，日志写入 logs/rsl_rl/run_logs/
-#   ./scripts/train_tracking.sh -b -o dance1_exp1   # 后台运行，日志命名为 dance1_exp1.log
+#   ./scripts/train_tracking.sh -o new_dof_pos     # 运行目录和日志均用 new_dof_pos
 #   ./scripts/train_tracking.sh -g 0 -m mjlab/motions/adam_sp/dance1_subject2.npz -n 4096 -l wandb
 
 set -e
@@ -15,7 +15,7 @@ MOTION_FILE="${MOTION_FILE:-mjlab/motions/adam_sp/dance1_subject2.npz}"
 NUM_ENVS="${NUM_ENVS:-4096}"
 LOGGER="${LOGGER:-wandb}"
 RUN_BACKGROUND=false
-LOG_NAME=""   # 为空则用日期；指定则用作日志文件名（可含 .log 或省略）
+RUN_NAME=""   # 为空则用时间戳/日期；指定则同时用作运行目录名和后台日志名
 EXTRA_ARGS=()
 
 # 解析命令行参数（短选项 + 长选项）
@@ -45,8 +45,8 @@ while [[ $# -gt 0 ]]; do
       RUN_BACKGROUND=true
       shift
       ;;
-    -o|--log_name)
-      LOG_NAME="$2"
+    -o|--name|--log_name)
+      RUN_NAME="$2"
       shift 2
       ;;
     -h|--help)
@@ -59,12 +59,12 @@ while [[ $# -gt 0 ]]; do
       echo "  -l, --logger NAME      日志后端，如 wandb 或 tensorboard (默认: wandb)"
       echo "  -t, --task TASK_ID     任务 ID (默认: Mjlab-Tracking-Flat-Adam-SP)"
       echo "  -b, --background       后台运行，stdout/stderr 写入 logs/rsl_rl/run_logs/"
-      echo "  -o, --log_name NAME    后台运行时日志文件名，不含路径；省略则用日期 (例: dance1_exp1)"
+      echo "  -o, --name NAME        运行名称，同时用于：运行目录 logs/rsl_rl/<exp>/NAME/ 和后台日志 run_logs/NAME.log"
       echo "  -h, --help             显示此帮助"
       echo ""
       echo "其余参数会原样传给 train.py（如 --video --video_length=100 等）。"
       echo ""
-      echo "环境变量可覆盖默认值: TASK, CUDA_DEVICES, MOTION_FILE, NUM_ENVS, LOGGER, LOG_NAME"
+      echo "环境变量可覆盖默认值: TASK, CUDA_DEVICES, MOTION_FILE, NUM_ENVS, LOGGER, RUN_NAME"
       exit 0
       ;;
     *)
@@ -81,9 +81,10 @@ cd "$REPO_ROOT"
 
 # 控制台日志目录：与 train.py 的 log 根目录一致，放在 logs/rsl_rl 下
 RUN_LOG_DIR="${REPO_ROOT}/logs/rsl_rl/run_logs"
-if [[ -n "$LOG_NAME" ]]; then
-  [[ "$LOG_NAME" == *.log ]] || LOG_NAME="${LOG_NAME}.log"
-  RUN_LOG_FILE="${RUN_LOG_DIR}/${LOG_NAME}"
+if [[ -n "$RUN_NAME" ]]; then
+  LOG_FILE_NAME="${RUN_NAME}"
+  [[ "$LOG_FILE_NAME" == *.log ]] || LOG_FILE_NAME="${LOG_FILE_NAME}.log"
+  RUN_LOG_FILE="${RUN_LOG_DIR}/${LOG_FILE_NAME}"
 else
   RUN_LOG_FILE="${RUN_LOG_DIR}/train_$(date +%Y-%m-%d_%H-%M-%S).log"
 fi
@@ -93,6 +94,7 @@ echo "[INFO] CUDA_VISIBLE_DEVICES=$CUDA_DEVICES"
 echo "[INFO] motion_file=$MOTION_FILE"
 echo "[INFO] num_envs=$NUM_ENVS"
 echo "[INFO] logger=$LOGGER"
+[[ -n "$RUN_NAME" ]] && echo "[INFO] run_name=$RUN_NAME"
 if [[ ${#EXTRA_ARGS[@]} -gt 0 ]]; then
   echo "[INFO] 额外参数: ${EXTRA_ARGS[*]}"
 fi
@@ -106,13 +108,18 @@ if [[ "$RUN_BACKGROUND" == true ]]; then
     echo "[INFO] motion_file=$MOTION_FILE"
     echo "[INFO] num_envs=$NUM_ENVS"
     echo "[INFO] logger=$LOGGER"
+    [[ -n "$RUN_NAME" ]] && echo "[INFO] run_name=$RUN_NAME"
     [[ ${#EXTRA_ARGS[@]} -gt 0 ]] && echo "[INFO] 额外参数: ${EXTRA_ARGS[*]}"
     echo "---"
     export CUDA_VISIBLE_DEVICES="$CUDA_DEVICES"
+    export PYTHONUNBUFFERED=1
+    RUN_DIR_ARGS=()
+    [[ -n "$RUN_NAME" ]] && RUN_DIR_ARGS=(--log-dir-name="$RUN_NAME")
     exec python scripts/train.py "$TASK" \
       --motion_file="$MOTION_FILE" \
       --env.scene.num-envs="$NUM_ENVS" \
       --agent.logger="$LOGGER" \
+      "${RUN_DIR_ARGS[@]}" \
       "${EXTRA_ARGS[@]}"
   } >> "$RUN_LOG_FILE" 2>&1 &
   TRAIN_PID=$!
@@ -124,8 +131,11 @@ if [[ "$RUN_BACKGROUND" == true ]]; then
 fi
 
 export CUDA_VISIBLE_DEVICES="$CUDA_DEVICES"
+RUN_DIR_ARGS=()
+[[ -n "$RUN_NAME" ]] && RUN_DIR_ARGS=(--log-dir-name="$RUN_NAME")
 exec python scripts/train.py "$TASK" \
   --motion_file="$MOTION_FILE" \
   --env.scene.num-envs="$NUM_ENVS" \
   --agent.logger="$LOGGER" \
+  "${RUN_DIR_ARGS[@]}" \
   "${EXTRA_ARGS[@]}"

@@ -96,7 +96,7 @@ def adam_sp_flat_tracking_env_cfg(
   cfg.rewards["lower_motion_body_ori"].weight = 0.5
   cfg.rewards["motion_body_pos"].weight = 0.0
   cfg.rewards["motion_body_ori"].weight = 0.0
-  cfg.rewards["action_rate_l2"].weight = -0.2
+  cfg.rewards["action_rate_l2"].weight = -0.1
   cfg.events["foot_friction"].params[
     "asset_cfg"
   ].geom_names = r"^(left|right)_foot[1-9]_collision$"
