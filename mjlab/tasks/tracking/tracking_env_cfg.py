@@ -73,7 +73,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
       params={"biased": True},
     ),
     "joint_vel": ObservationTermCfg(
-      func=mdp.joint_vel_rel, noise=Unoise(n_min=-0.5, n_max=0.5)
+      func=mdp.joint_vel_rel, noise=Unoise(n_min=-1.5, n_max=1.5)
     ),
     "actions": ObservationTermCfg(func=mdp.last_action),
   }

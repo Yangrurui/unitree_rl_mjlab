@@ -84,7 +84,7 @@ def adam_sp_flat_tracking_env_cfg(
     "right_knee_link",
     "right_ankle_roll_link",
   )
-  cfg.rewards["lower_motion_body_pos"].weight = 0.5
+  cfg.rewards["lower_motion_body_pos"].weight = 0.8
   cfg.rewards["lower_motion_body_ori"].params["body_names"] = (
     "left_hip_roll_link",
     "left_knee_link",
@@ -93,10 +93,10 @@ def adam_sp_flat_tracking_env_cfg(
     "right_knee_link",
     "right_ankle_roll_link",
   )
-  cfg.rewards["lower_motion_body_ori"].weight = 0.5
+  cfg.rewards["lower_motion_body_ori"].weight = 0.8
   cfg.rewards["motion_body_pos"].weight = 0.0
   cfg.rewards["motion_body_ori"].weight = 0.0
-  cfg.rewards["action_rate_l2"].weight = -0.1
+  cfg.rewards["action_rate_l2"].weight = -0.2
   cfg.events["foot_friction"].params[
     "asset_cfg"
   ].geom_names = r"^(left|right)_foot[1-9]_collision$"
