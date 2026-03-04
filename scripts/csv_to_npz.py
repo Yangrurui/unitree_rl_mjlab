@@ -9,7 +9,7 @@ from tqdm import tqdm
 from mjlab.entity import Entity
 from mjlab.scene import Scene
 from mjlab.sim.sim import Simulation, SimulationCfg
-from mjlab.tasks.tracking.config.g1.env_cfgs import unitree_g1_flat_tracking_env_cfg
+from mjlab.tasks.tracking.config.adam_sp.env_cfgs import adam_sp_flat_tracking_env_cfg
 from mjlab.utils.lab_api.math import (
   axis_angle_from_quat,
   quat_conjugate,
@@ -304,7 +304,7 @@ def run_sim(
           "body_ang_vel_w",
         ):
           log[k] = np.stack(log[k], axis=0)
-        np.savez(f"./mjlab/motions/g1/{output_name}", **log)  # type: ignore[arg-type]
+        np.savez(f"./mjlab/motions/adam_sp/{output_name}", **log)  # type: ignore[arg-type]
 
 
 def main(
@@ -330,7 +330,7 @@ def main(
   sim_cfg = SimulationCfg()
   sim_cfg.mujoco.timestep = 1.0 / output_fps
 
-  scene = Scene(unitree_g1_flat_tracking_env_cfg().scene, device=device)
+  scene = Scene(adam_sp_flat_tracking_env_cfg().scene, device=device)
   model = scene.compile()
 
   sim = Simulation(num_envs=1, cfg=sim_cfg, model=model, device=device)

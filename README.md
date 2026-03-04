@@ -1,10 +1,10 @@
-# Unitree RL Mjlab
+# PND RL Mjlab
 
 
 ## ✳️ Overview
-Unitree RL Mjlab is a reinforcement learning project built upon the
+PND RL Mjlab is a reinforcement learning project built upon the
 [mjlab](https://github.com/mujocolab/mjlab.git), using MuJoCo as its 
-physics simulation backend, currently supporting Unitree Go2, Unitree G1 and Unitree H1_2.
+physics simulation backend, currently supporting PND Adam SP.
 
 Mjlab combines [Isaac Lab](https://github.com/isaac-sim/IsaacLab)'s proven API
 with best-in-class [MuJoCo](https://github.com/google-deepmind/mujoco_warp)
@@ -33,7 +33,7 @@ The basic workflow for using reinforcement learning to achieve motion control is
 
 - **Train**: The agent interacts with the MuJoCo simulation and optimizes policies through reward maximization.
 - **Play**: Replay trained policies to verify expected behavior.
-- **Sim2Real**: Deploy trained policies to physical Unitree robots for real-world execution.
+- **Sim2Real**: Deploy trained policies to physical Adam SP robots for real-world execution.
 
 
 ## 🛠️ Usage Guide
@@ -43,23 +43,21 @@ The basic workflow for using reinforcement learning to achieve motion control is
 Run the following command to train a velocity tracking policy:
 
 ```bash
-python scripts/train.py Mjlab-Velocity-Flat-Unitree-G1 --env.scene.num-envs=4096
+python scripts/train.py Mjlab-Velocity-Flat-Adam-SP --env.scene.num-envs=4096
 ```
 
 Multi-GPU Training: Scale to multiple GPUs using --gpu-ids:
 
 ```bash
-python scripts/train.py Mjlab-Velocity-Flat-Unitree-G1 \
+python scripts/train.py Mjlab-Velocity-Flat-Adam-SP \
   --gpu-ids 0 1 \
   --env.scene.num-envs=4096
 ```
 
-- The first argument (e.g., Mjlab-Velocity-Flat-Unitree-G1) specifies the training task.
+- The first argument (e.g., Mjlab-Velocity-Flat-Adam-SP) specifies the training task.
 Available velocity tracking tasks:
-  - Mjlab-Velocity-Flat-Unitree-Go2
-  - Mjlab-Velocity-Flat-Unitree-G1
-  - Mjlab-Velocity-Flat-Unitree-G1-23DOF
-  - Mjlab-Velocity-Flat-Unitree-H1_2
+  - Mjlab-Velocity-Flat-Adam-SP
+
 
 > [!NOTE]
 > For more details, refer to the mjlab documentation:
@@ -67,7 +65,7 @@ Available velocity tracking tasks:
 
 ### 2. Motion Imitation Training
 
-Train a Unitree G1 to mimic reference motion sequences.
+Train a Adam SP to mimic reference motion sequences.
 
 <div style="margin-left: 20px;">
 
@@ -90,7 +88,7 @@ python scripts/csv_to_npz.py \
 After generating the NPZ file, launch imitation training:
 
 ```bash
-python scripts/train.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motions/g1/dance1_subject2.npz --env.scene.num-envs=4096
+python scripts/train.py Mjlab-Tracking-Flat-Adam-SP --motion_file=mjlab/motions/g1/dance1_subject2.npz --env.scene.num-envs=4096
 ```
 
 </div>
@@ -118,12 +116,12 @@ To visualize policy behavior in MuJoCo:
 
 Velocity tracking:
 ```bash
-python scripts/play.py Mjlab-Velocity-Flat-Unitree-G1 --checkpoint_file=logs/rsl_rl/g1_velocity/2026-xx-xx_xx-xx-xx/model_xx.pt
+python scripts/play.py Mjlab-Velocity-Flat-Adam-SP --checkpoint_file=logs/rsl_rl/g1_velocity/2026-xx-xx_xx-xx-xx/model_xx.pt
 ```
 
 Motion imitation:
 ```bash
-python scripts/play.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motions/g1/dance1_subject2.npz --checkpoint_file=logs/rsl_rl/g1_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
+python scripts/play.py Mjlab-Tracking-Flat-Adam-SP --motion_file=mjlab/motions/g1/dance1_subject2.npz --checkpoint_file=logs/rsl_rl/g1_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
 ```
 
 **Note**：
@@ -138,9 +136,7 @@ python scripts/play.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motion
 
 ### 4. Real Deployment
 
-Before deployment, install the required communication tools:
-- [cyclonedds](https://github.com/eclipse-cyclonedds/cyclonedds.git)
-- [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2.git)
+
 
 <div style="margin-left: 20px;">
 
@@ -159,7 +155,7 @@ Use `ifconfig` to determine the Ethernet device name for deployment.
 
 #### 4.4 Compilation
 
-Example: Unitree G1 velocity control.
+Example: Adam SP velocity control.
 Place `policy.onnx` and `policy.onnx.data` into: `deploy/robots/g1/config/policy/velocity/v0/exported`.
 Then compile:
 

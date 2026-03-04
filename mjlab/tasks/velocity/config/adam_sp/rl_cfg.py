@@ -1,4 +1,4 @@
-"""RL configuration for Unitree G1 velocity task."""
+"""RL configuration for PND Adam SP velocity task."""
 
 from mjlab.rl import (
   RslRlOnPolicyRunnerCfg,
@@ -8,7 +8,7 @@ from mjlab.rl import (
 
 
 def adam_sp_ppo_runner_cfg() -> RslRlOnPolicyRunnerCfg:
-  """Create RL runner configuration for Adam SP velocity task."""
+  """Create RL runner configuration for PND Adam SP velocity task."""
   return RslRlOnPolicyRunnerCfg(
     policy=RslRlPpoActorCriticCfg(
       init_noise_std=1.0,
@@ -32,7 +32,7 @@ def adam_sp_ppo_runner_cfg() -> RslRlOnPolicyRunnerCfg:
       desired_kl=0.01,
       max_grad_norm=1.0,
     ),
-    experiment_name="g1_velocity",
+    experiment_name="adam_sp_velocity",
     save_interval=100,
     num_steps_per_env=24,
     max_iterations=10001,

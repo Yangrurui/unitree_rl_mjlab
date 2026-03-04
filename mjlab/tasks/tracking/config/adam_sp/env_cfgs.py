@@ -1,4 +1,4 @@
-"""Unitree G1 flat tracking environment configurations."""
+"""PND Adam SP flat tracking environment configurations."""
 
 from mjlab.asset_zoo.robots import (
   get_adam_sp_robot_cfg,
@@ -15,10 +15,9 @@ def adam_sp_flat_tracking_env_cfg(
   has_state_estimation: bool = True,
   play: bool = False,
 ) -> ManagerBasedRlEnvCfg:
-  """Create Unitree G1 flat terrain tracking configuration."""
+  """Create PND Adam SP flat terrain tracking configuration."""
   cfg = make_tracking_env_cfg()
-  # cfg.sim.mujoco.timestep = 0.002
-  # cfg.decimation = 10
+
 
   cfg.scene.entities = {"robot": get_adam_sp_robot_cfg()}
 
@@ -56,47 +55,7 @@ def adam_sp_flat_tracking_env_cfg(
     "right_elbow_link",
     "right_wrist_roll_link",
   )
-  cfg.rewards["upper_motion_body_pos"].params["body_names"] = (
-    "torso_link",
-    "left_shoulder_roll_link",
-    "left_elbow_link",
-    "left_wrist_roll_link",
-    "right_shoulder_roll_link",
-    "right_elbow_link",
-    "right_wrist_roll_link",
-  )
-  cfg.rewards["upper_motion_body_pos"].weight = 1.5
-  cfg.rewards["upper_motion_body_ori"].params["body_names"] = (
-    "torso_link",
-    "left_shoulder_roll_link",
-    "left_elbow_link",
-    "left_wrist_roll_link",
-    "right_shoulder_roll_link",
-    "right_elbow_link",
-    "right_wrist_roll_link",
-  )
-  cfg.rewards["upper_motion_body_ori"].weight = 1.5
-  cfg.rewards["lower_motion_body_pos"].params["body_names"] = (
-    "left_hip_roll_link",
-    "left_knee_link",
-    "left_ankle_roll_link",
-    "right_hip_roll_link",
-    "right_knee_link",
-    "right_ankle_roll_link",
-  )
-  cfg.rewards["lower_motion_body_pos"].weight = 0.8
-  cfg.rewards["lower_motion_body_ori"].params["body_names"] = (
-    "left_hip_roll_link",
-    "left_knee_link",
-    "left_ankle_roll_link",
-    "right_hip_roll_link",
-    "right_knee_link",
-    "right_ankle_roll_link",
-  )
-  cfg.rewards["lower_motion_body_ori"].weight = 0.8
-  cfg.rewards["motion_body_pos"].weight = 0.0
-  cfg.rewards["motion_body_ori"].weight = 0.0
-  cfg.rewards["action_rate_l2"].weight = -0.2
+  
   cfg.events["foot_friction"].params[
     "asset_cfg"
   ].geom_names = r"^(left|right)_foot[1-9]_collision$"
@@ -108,7 +67,6 @@ def adam_sp_flat_tracking_env_cfg(
     "left_wrist_roll_link",
     "right_wrist_roll_link",
   )
-
   cfg.viewer.body_name = "pelvis"
 
   # Modify observations if we don't have state estimation.

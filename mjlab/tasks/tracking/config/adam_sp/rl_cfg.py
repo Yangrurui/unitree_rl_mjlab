@@ -1,4 +1,4 @@
-"""RL configuration for Unitree G1 tracking task."""
+"""RL configuration for PND Adam SP tracking task."""
 
 from mjlab.rl import (
   RslRlOnPolicyRunnerCfg,
@@ -8,7 +8,7 @@ from mjlab.rl import (
 
 
 def adam_sp_tracking_ppo_runner_cfg() -> RslRlOnPolicyRunnerCfg:
-  """Create RL runner configuration for Unitree G1 tracking task."""
+  """Create RL runner configuration for PND Adam SP tracking task."""
   return RslRlOnPolicyRunnerCfg(
     policy=RslRlPpoActorCriticCfg(
       init_noise_std=1.0,

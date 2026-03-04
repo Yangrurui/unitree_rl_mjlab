@@ -1,4 +1,4 @@
-"""Unitree G1 constants."""
+"""PND Adam SP 23 DOF constants."""
 
 from pathlib import Path
 
@@ -199,7 +199,7 @@ ADAM_SP_ARTICULATION = EntityArticulationInfoCfg(
 
 
 def get_adam_sp_robot_cfg() -> EntityCfg:
-  """Get a fresh G1 robot configuration instance.
+  """Get a fresh Adam SP robot configuration instance.
 
   Returns a new EntityCfg instance each time to avoid mutation issues when
   the config is shared across multiple places.

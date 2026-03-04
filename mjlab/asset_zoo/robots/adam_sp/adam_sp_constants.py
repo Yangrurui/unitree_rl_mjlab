@@ -1,4 +1,4 @@
-"""Unitree G1 constants."""
+"""PND Adam SP constants."""
 
 from pathlib import Path
 
@@ -77,7 +77,7 @@ ADAM_SP_ANKLEPITCH_ACTUATOR = BuiltinPositionActuatorCfg(
   stiffness=130.0,
   damping=3.5,
   effort_limit=80.0,
-  armature=0.0549,
+  armature=0.0549*2,
 )
 ADAM_SP_ANKLEROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -86,7 +86,7 @@ ADAM_SP_ANKLEROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   stiffness=70.0,
   damping=2.0,
   effort_limit=40.0,
-  armature=0.0549,
+  armature=0.0549*2,
 )
 ADAM_SP_WAIST_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -212,7 +212,7 @@ ADAM_SP_ARTICULATION = EntityArticulationInfoCfg(
 
 
 def get_adam_sp_robot_cfg() -> EntityCfg:
-  """Get a fresh G1 robot configuration instance.
+  """Get a fresh Adam SP robot configuration instance.
 
   Returns a new EntityCfg instance each time to avoid mutation issues when
   the config is shared across multiple places.

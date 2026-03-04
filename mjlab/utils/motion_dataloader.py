@@ -325,7 +325,7 @@ class Unify_Motion_Dataloader(Motion_Dataloader):
         device: Device to load tensors on
         
     Example:
-        >>> dataset = Unify_Motion_Dataset(robot_map, smplx_map, robot_name="g1")
+        >>> dataset = Unify_Motion_Dataset(robot_map, smplx_map, robot_name="adam_sp")
         >>> dataloader = Unify_Motion_Dataloader(dataset, body_indexes=[0,1,2,...], device="cuda")
         >>> 
         >>> # Use inherited sampling method

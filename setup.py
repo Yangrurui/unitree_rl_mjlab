@@ -1,4 +1,4 @@
-"""Installation script for the 'unitree_rl_mjlab' python package."""
+"""Installation script for the 'pnd_rl_mjlab' python package."""
 
 from setuptools import setup
 
@@ -24,7 +24,7 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-    name="unitree_rl_mjlab",
+    name="pnd_rl_mjlab",
     packages=["mjlab"],
     version="0.0.1",
     install_requires=INSTALL_REQUIRES,

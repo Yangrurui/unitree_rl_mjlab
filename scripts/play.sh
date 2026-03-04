@@ -6,8 +6,8 @@
 GPU=0
 TASK=Mjlab-Tracking-Flat-Adam-SP
 MOTION_FILE=mjlab/motions/adam_sp/dance1_subject2.npz
-# 请改为你的实际 run 目录下的 model_xxx.pt，例如: logs/rsl_rl/g1_tracking/2026-02-24_12-00-00/model_5000.pt
-CHECKPOINT_FILE=logs/rsl_rl/g1_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
+# 请改为你的实际 run 目录下的 model_xxx.pt，例如: logs/rsl_rl/adam_sp_tracking/2026-02-24_12-00-00/model_5000.pt
+CHECKPOINT_FILE=logs/rsl_rl/adam_sp_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
 NUM_ENVS=
 VIDEO=false
 

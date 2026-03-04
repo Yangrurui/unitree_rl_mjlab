@@ -1,10 +1,10 @@
-# Unitree RL Mjlab
+# PND RL Mjlab
 
 
 ## ✳️ 概述
 
-Unitree RL Mjlab 是一个基于 [mjlab](https://github.com/mujocolab/mjlab.git) 构建的强化学习项目，
-使用 MuJoCo 作为物理仿真后端，当前支持 Unitree Go2、Unitree G1 和 Unitree H1_2 机器人。
+PND RL Mjlab 是一个基于 [mjlab](https://github.com/mujocolab/mjlab.git) 构建的强化学习项目，
+使用 MuJoCo 作为物理仿真后端，当前支持 PND Adam SP 机器人。
 
 Mjlab 结合了 [Isaac Lab](https://github.com/isaac-sim/IsaacLab) 的成熟高层 API 与 
 [MuJoCo](https://github.com/google-deepmind/mujoco_warp) 的高精度物理引擎，
@@ -42,22 +42,20 @@ Mjlab 结合了 [Isaac Lab](https://github.com/isaac-sim/IsaacLab) 的成熟高�
 运行以下命令进行速度跟踪训练：
 
 ```bash
-python scripts/train.py Mjlab-Velocity-Flat-Unitree-G1 --env.scene.num-envs=4096
+python scripts/train.py Mjlab-Velocity-Flat-Adam-SP --env.scene.num-envs=4096
 ```
 
 多 GPU 训练：使用 --gpu-ids 扩展到多块 GPU：
 
 ```bash
-python scripts/train.py Mjlab-Velocity-Flat-Unitree-G1 \
+python scripts/train.py Mjlab-Velocity-Flat-Adam-SP \
   --gpu-ids 0 1 \
   --env.scene.num-envs=4096
 ```
 
-- 第一个参数(如 Mjlab-Velocity-Flat-Unitree-G1)为必选参数，确定要启用的训练环境。可选：
-  - Mjlab-Velocity-Flat-Unitree-Go2
-  - Mjlab-Velocity-Flat-Unitree-G1
-  - Mjlab-Velocity-Flat-Unitree-G1-23DOF
-  - Mjlab-Velocity-Flat-Unitree-H1_2
+- 第一个参数(如 Mjlab-Velocity-Flat-Adam-SP)为必选参数，确定要启用的训练环境。可选：
+  - Mjlab-Velocity-Flat-Adam-SP
+
 
 > [!NOTE]
 > 更多有关详细说明，请参阅 mjlab 文档
@@ -65,7 +63,7 @@ python scripts/train.py Mjlab-Velocity-Flat-Unitree-G1 \
 
 ### 2. 动作模仿训练
 
-训练 Unitree G1 模仿参考动作序列。
+训练 Adam-SP 模仿参考动作序列。
 
 <div style="margin-left: 20px;">
 
@@ -81,7 +79,7 @@ python scripts/csv_to_npz.py \
 --output-fps 50
 ```
 
-**npz文件默认保存路径为**：`mjlab/motions/g1/...`
+**npz文件默认保存路径为**：`mjlab/motions/adam_sp/...`
 
 #### 2.2 训练
 
@@ -116,12 +114,12 @@ CUDA_VISIBLE_DEVICES=0 python scripts/train.py Mjlab-Tracking-Flat-Adam-SP --mot
 
 查看速度跟踪训练效果：
 ```bash
-python scripts/play.py Mjlab-Velocity-Flat-Unitree-G1 --checkpoint_file=logs/rsl_rl/g1_velocity/2026-xx-xx_xx-xx-xx/model_xx.pt
+python scripts/play.py Mjlab-Velocity-Flat-Adam-SP --checkpoint_file=logs/rsl_rl/adam_sp_velocity/2026-xx-xx_xx-xx-xx/model_xx.pt
 ```
 
 查看动作模仿训练效果：
 ```bash
-python scripts/play.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motions/g1/dance1_subject2.npz --checkpoint_file=logs/rsl_rl/g1_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
+python scripts/play.py Mjlab-Tracking-Flat-Adam-SP --motion_file=mjlab/motions/adam_sp/dance1_subject2.npz --checkpoint_file=logs/rsl_rl/adam_sp_tracking/2026-xx-xx_xx-xx-xx/model_xx.pt
 ```
 
 **说明**：
@@ -137,8 +135,7 @@ python scripts/play.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motion
 ### 4. 实物部署
 
 实物部署前先确保主机安装了下列通信工具：
-- [cyclonedds](https://github.com/eclipse-cyclonedds/cyclonedds.git)
-- [unitree_sdk2](https://github.com/unitreerobotics/unitree_sdk2.git)
+
 
 <div style="margin-left: 20px;">
 
@@ -156,7 +153,7 @@ python scripts/play.py Mjlab-Tracking-Flat-Unitree-G1 --motion_file=mjlab/motion
 然后使用 `ifconfig` 命令查看与机器人连接的网卡名称，记录后用于启动参数。
 
 #### 4.4 编译
-以 Unitree G1 速度控制为例（其他机器人同理）。
+以 PND Adam SP 速度控制为例（其他机器人同理）。
 将策略文件（`policy.onnx` 和 `policy.onnx.data`）放入`deploy/robots/g1/config/policy/velocity/vo/exported` 下，然后执行：
 
 ```bash

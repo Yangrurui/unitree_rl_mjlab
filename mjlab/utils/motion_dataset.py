@@ -22,7 +22,7 @@ class Motion_Dataset(Dataset):
     Args:
         dataset_dirs: List of dataset directory paths. Each should follow the structure:
             ./datasets/npz_datasets/{dataset_name}/{robot_name}/
-        robot_name: Name of the robot (e.g., "g1").
+        robot_name: Name of the robot (e.g., "adam_sp").
         splits: List of dataset splits corresponding to each dataset_dir. 
             Must have the same length as dataset_dirs. Each element can be:
             - A string: single split name (e.g., "train", "val", "walk_subset")
@@ -32,7 +32,7 @@ class Motion_Dataset(Dataset):
         >>> # Single split per dataset
         >>> dataset = Motion_Dataset(
         ...     dataset_dirs=["./datasets/npz_datasets/LAFAN1_Retargeting_Dataset"],
-        ...     robot_name="g1",
+        ...     robot_name="adam_sp",
         ...     splits=["train"]
         ... )
         >>> 
@@ -42,7 +42,7 @@ class Motion_Dataset(Dataset):
         ...         "./datasets/npz_datasets/LAFAN1_Retargeting_Dataset",
         ...         "./datasets/npz_datasets/LAFAN1_Retargeting_Dataset"
         ...     ],
-        ...     robot_name="g1",
+        ...     robot_name="adam_sp",
         ...     splits=["train", ["train", "walk_subset"]]  # Second dataset combines two splits
         ... )
         >>> print(f"Dataset size: {len(dataset)}")
