@@ -118,3 +118,31 @@ def self_collision_cost(env: ManagerBasedRlEnv, sensor_name: str) -> torch.Tenso
   sensor: ContactSensor = env.scene[sensor_name]
   assert sensor.data.found is not None
   return sensor.data.found.squeeze(-1)
+
+
+def motion_global_feet_position_error_exp(
+    env: ManagerBasedRlEnv,
+    command_name: str,
+    std: float = 0.03,
+    body_names: tuple[str, ...] | None = None,
+) -> torch.Tensor:
+    """
+    Feet position tracking in world frame (high precision).
+
+    Args:
+        env: The environment.
+        command_name: Name of the motion command.
+        std: Std (in meters) for exponential reward.
+
+    Returns:
+        Feet position tracking reward.
+    """
+    command = cast(MotionCommand, env.command_manager.get_term(command_name))
+    feet_idx = _get_body_indexes(command, body_names)
+
+    if len(feet_idx) > 0:
+        diff = command.body_pos_w[:, feet_idx, :] - command.robot_body_pos_w[:, feet_idx, :]
+        error = (diff ** 2).mean(dim=-1).mean(dim=-1)
+        return torch.exp(-error / (std ** 2))
+    else:
+        return torch.zeros(env.num_envs, device=env.device)

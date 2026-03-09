@@ -110,6 +110,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
       terms=policy_terms,
       concatenate_terms=True,
       enable_corruption=True,
+      # history_length=5,
     ),
     "critic": ObservationGroupCfg(
       terms=critic_terms,
@@ -194,7 +195,6 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
     "pd_gains": EventTermCfg(
       mode="startup",
       func=mdp.randomize_pd_gains,
-      # domain_randomization=True,
       params={
         "asset_cfg": SceneEntityCfg("robot"),
         "kp_range": (0.8, 1.2),
@@ -219,7 +219,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
   ##
   # Rewards
   ##
-
+  
   rewards: dict[str, RewardTermCfg] = {
     "motion_global_root_pos": RewardTermCfg(
       func=mdp.motion_global_anchor_position_error_exp,
@@ -251,7 +251,18 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
       weight=1.0,
       params={"command_name": "motion", "std": 3.14},
     ),
+    "motion_global_feet_pos": RewardTermCfg(
+      func=mdp.motion_global_feet_position_error_exp,
+      weight=1.0,
+      params={
+        "command_name": "motion",
+        "std": 0.5,
+        "body_names": ("left_ankle_roll_link", "right_ankle_roll_link", "left_wrist_roll_link", "right_wrist_roll_link"),
+      },
+    ),
     "action_rate_l2": RewardTermCfg(func=mdp.action_rate_l2, weight=-1e-1),
+    "joint_acc": RewardTermCfg(func=mdp.joint_acc_l2, weight=-2.5e-7),  
+    "joint_torque": RewardTermCfg(func=mdp.joint_torques_l2, weight=-1e-5),
     "joint_limit": RewardTermCfg(
       func=mdp.joint_pos_limits,
       weight=-10.0,
