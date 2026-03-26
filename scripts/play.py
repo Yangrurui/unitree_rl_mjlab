@@ -4,13 +4,16 @@ import os
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 import torch
 import tyro
 
 from mjlab.rsl_rl.runners import OnPolicyRunner
 from mjlab.rsl_rl.utils.exporter import export_policy_as_jit
+
 from mjlab.envs import ManagerBasedRlEnv
+from mjlab.tasks.tracking.rl.exporter import export_motion_policy_as_onnx
+
 from mjlab.rl import RslRlVecEnvWrapper
 from mjlab.tasks.registry import list_tasks, load_env_cfg, load_rl_cfg, load_runner_cls
 from mjlab.tasks.tracking.mdp import MotionCommandCfg
@@ -36,6 +39,9 @@ class PlayConfig:
     viewer: Literal["auto", "native", "viser"] = "auto"
     # Export policy as TorchScript (.pt) to checkpoint dir before playing.
     trace_pt: bool = True
+    # Record joint torques during play and save to TXT file.
+    record_torques: bool = False
+    torque_output_file: str | None = None
 
     # Internal flag used by demo script.
     _demo_mode: tyro.conf.Suppress[bool] = False
@@ -165,6 +171,21 @@ def run_play(task_id: str, cfg: PlayConfig):
                 filename="policy.pt",
             )
             print(f"[INFO] Traced PT saved to {log_dir / 'policy.pt'}")
+            if is_tracking_task:
+                normalizer = (
+                    runner.alg.policy.actor_obs_normalizer
+                    if runner.alg.policy.actor_obs_normalization
+                    else None
+                )
+                onnx_filename = log_dir.name + ".onnx"
+                export_motion_policy_as_onnx(
+                    env.unwrapped,
+                    runner.alg.policy,
+                    normalizer=normalizer,
+                    path=export_dir,
+                    filename=onnx_filename,
+                )
+                print(f"[INFO] Traced tracking ONNX saved to {log_dir / onnx_filename}")
         policy = runner.get_inference_policy(device=device)
 
     # Handle "auto" viewer selection.

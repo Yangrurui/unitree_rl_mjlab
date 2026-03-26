@@ -55,7 +55,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
     "motion_anchor_ori_b": ObservationTermCfg(
       func=mdp.motion_anchor_ori_b,
       params={"command_name": "motion"},
-      noise=Unoise(n_min=-0.05, n_max=0.05),
+      noise=Unoise(n_min=-0.1, n_max=0.1),
     ),
     # "base_lin_vel": ObservationTermCfg(
     #   func=mdp.builtin_sensor,
@@ -178,7 +178,7 @@ def make_tracking_env_cfg() -> ManagerBasedRlEnvCfg:
         "operation": "add",
         "field": "body_ipos",
         "ranges": {
-          0: (-0.025, 0.025),
+          0: (-0.05, 0.05),
           1: (-0.05, 0.05),
           2: (-0.05, 0.05),
         },

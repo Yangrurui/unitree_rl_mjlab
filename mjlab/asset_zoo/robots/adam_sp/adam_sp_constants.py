@@ -51,6 +51,7 @@ ADAM_SP_HIPPITCH_KNEEPITCH_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=7.0,
   effort_limit=230.0,
   armature=0.13426,
+  # frictionloss=1.589,
 )
 ADAM_SP_HIPROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -60,6 +61,7 @@ ADAM_SP_HIPROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=10.0,
   effort_limit=180.0,
   armature=0.281573,
+  # frictionloss=4.216,
 )
 ADAM_SP_HIPYAW_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -69,6 +71,7 @@ ADAM_SP_HIPYAW_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=2.0,
   effort_limit=105.0,
   armature=0.23409,
+  # frictionloss=3.774,
 )
 ADAM_SP_ANKLEPITCH_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -78,6 +81,7 @@ ADAM_SP_ANKLEPITCH_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=3.5,
   effort_limit=80.0,
   armature=0.0549*2,
+  # frictionloss=0.3552,
 )
 ADAM_SP_ANKLEROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -87,6 +91,7 @@ ADAM_SP_ANKLEROLL_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=2.0,
   effort_limit=40.0,
   armature=0.0549*2,
+  # frictionloss=0.3552,
 )
 ADAM_SP_WAIST_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -98,6 +103,7 @@ ADAM_SP_WAIST_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=11.0,
   effort_limit=150.0,
   armature=0.23409,
+  # frictionloss=1.887,
 )
 ADAM_SP_ARM_SHOULDER_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -109,6 +115,7 @@ ADAM_SP_ARM_SHOULDER_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=3.0,
   effort_limit=65.0,
   armature=0.01,
+  # frictionloss=0.7548,
 )
 ADAM_SP_ARM_ELBOW_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -118,6 +125,7 @@ ADAM_SP_ARM_ELBOW_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=3.0,
   effort_limit=30.0,
   armature=0.01,
+  # frictionloss=0.80325,
 )
 ADAM_SP_ARM_WRIST_ACTUATOR = BuiltinPositionActuatorCfg(
   target_names_expr=(
@@ -129,6 +137,7 @@ ADAM_SP_ARM_WRIST_ACTUATOR = BuiltinPositionActuatorCfg(
   damping=1.0,
   effort_limit=6.4,
   armature=0.01,
+  # frictionloss=0.80325,
 )
 
 
@@ -166,24 +175,24 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
 # are given condim=3.
 FULL_COLLISION = CollisionCfg(
   geom_names_expr=(".*_collision",),
-  condim={r"^(left|right)_foot[1-9]_collision$": 3, ".*_collision": 1},
-  priority={r"^(left|right)_foot[1-9]_collision$": 1},
-  friction={r"^(left|right)_foot[1-9]_collision$": (0.6,)},
+  condim={r"^(left|right)_foot_collision$": 3, ".*_collision": 1},
+  priority={r"^(left|right)_foot_collision$": 1},
+  friction={r"^(left|right)_foot_collision$": (0.6,)},
 ) 
 
 FULL_COLLISION_WITHOUT_SELF = CollisionCfg(
   geom_names_expr=(".*_collision",),
   contype=0,
   conaffinity=1,
-  condim={r"^(left|right)_foot[1-9]_collision$": 3, ".*_collision": 1},
-  priority={r"^(left|right)_foot[1-9]_collision$": 1},
-  friction={r"^(left|right)_foot[1-9]_collision$": (0.6,)},
+  condim={r"^(left|right)_foot_collision$": 3, ".*_collision": 1},
+  priority={r"^(left|right)_foot_collision$": 1},
+  friction={r"^(left|right)_foot_collision$": (0.6,)},
 )
 
 # This disables all collisions except the feet.
 # Feet get condim=3, all other geoms are disabled.
 FEET_ONLY_COLLISION = CollisionCfg(
-  geom_names_expr=(r"^(left|right)_foot[1-9]_collision$",),
+  geom_names_expr=(r"^(left|right)_foot_collision$",),
   contype=0,
   conaffinity=1,
   condim=3,
